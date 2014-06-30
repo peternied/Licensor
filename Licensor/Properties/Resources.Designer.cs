@@ -61,7 +61,18 @@ namespace Licensor.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to // ------------------------------------------------------------------------------
+        ///// Copyright {0} Microsoft Corporation
+        /////
+        ///// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+        ///// you may not use this file except in compliance with the License.
+        ///// You may obtain a copy of the License at
+        /////
+        ///// http://www.apache.org/licenses/LICENSE-2.0
+        /////
+        ///// Unless required by applicable law or agreed to in writing, software
+        ///// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+        ///// WITH [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string CLicenseFormat {
             get {
@@ -70,7 +81,18 @@ namespace Licensor.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to &lt;!-- ------------------------------------------------------------------------------
+        ///// Copyright {0} Microsoft Corporation
+        /////
+        ///// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+        ///// you may not use this file except in compliance with the License.
+        ///// You may obtain a copy of the License at
+        /////
+        ///// http://www.apache.org/licenses/LICENSE-2.0
+        /////
+        ///// Unless required by applicable law or agreed to in writing, software
+        ///// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+        ///// WI [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string JSLicenseFormat {
             get {

@@ -118,8 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="CLicenseFormat" xml:space="preserve">
-    <value />
-    <comment>// ------------------------------------------------------------------------------
+    <value>// ------------------------------------------------------------------------------
 // Copyright {0} Microsoft Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -133,11 +132,11 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-// ------------------------------------------------------------------------------</comment>
+// ------------------------------------------------------------------------------
+</value>
   </data>
   <data name="JSLicenseFormat" xml:space="preserve">
-    <value />
-    <comment>&lt;!-- ------------------------------------------------------------------------------
+    <value>&lt;!-- ------------------------------------------------------------------------------
 // Copyright {0} Microsoft Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -151,6 +150,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-// ------------------------------------------------------------------------------ --&gt;</comment>
+// ------------------------------------------------------------------------------ --&gt;
+</value>
   </data>
 </root>

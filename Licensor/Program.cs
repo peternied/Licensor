@@ -12,8 +12,8 @@
     {
         private static readonly IDictionary<string, string> licensesByExtension = new Dictionary<string, string>
         {
-            { ".cs", Resources.CLicenseFormat  },
-            { ".java", Resources.CLicenseFormat  },
+            { ".cs", Resources.CLicenseFormat },
+            { ".java", Resources.CLicenseFormat },
             { ".js", Resources.JSLicenseFormat },
         };
 
@@ -34,15 +34,30 @@
                 .Where(file => !_startsWithBlacklist.Any(Path.GetFileName(file).StartsWith));
 
             var filesToApplyLicense = filesToLicense
-                .Where(file => ValidLicenseHeader(file, licensesByExtension[Path.GetExtension(file)]));
+                .Where(file => !ValidLicenseHeader(file, licensesByExtension[Path.GetExtension(file)]));
+
+            filesToApplyLicense.Take(1)
+                .AsParallel()
+                .ForAll(file => ApplyLicenseHeader(file, licensesByExtension[Path.GetExtension(file)]));
         }
 
-        private static bool ValidLicenseHeader(string filename, string licenseFormat)
+        private static void ApplyLicenseHeader(string file, string licenseFormat)
+        {
+            var license = string.Format(licenseFormat, DateTime.Now.Year);
+            string fileContents = File.ReadAllText(file);
+            using (TextWriter writer = new StreamWriter(File.OpenWrite(file)))
+            {
+                writer.WriteLine(license);
+                writer.Write(fileContents);
+            }
+        }
+
+        private static bool ValidLicenseHeader(string file, string licenseFormat)
         {
             const int linesToBuffer = 20;
             StringBuilder buffered = new StringBuilder();
 
-            using (StreamReader reader = new StreamReader(File.OpenRead(filename)))
+            using (StreamReader reader = new StreamReader(File.OpenRead(file)))
             {
                 for (int i = 0; !reader.EndOfStream && i != linesToBuffer; i++)
                 {
