@@ -1,17 +1,27 @@
 ﻿namespace Licensor
 {
     using System;
+    using System.Collections.Generic;
     using System.IO;
     using System.Linq;
+    using System.Text;
 
-    class Program
+    using Licensor.Properties;
+
+    internal class Program
     {
-        private readonly static string[] _supportedExtensions = { ".cs", ".java", ".js"};
+        private static readonly IDictionary<string, string> licensesByExtension = new Dictionary<string, string>
+        {
+            { ".cs", Resources.CLicenseFormat  },
+            { ".java", Resources.CLicenseFormat  },
+            { ".js", Resources.JSLicenseFormat },
+        };
 
         private readonly static string[] _startsWithBlacklist = { "jquery" };
 
         static void Main(string[] args)
         {
+ 
             if (args.Length != 1)
             {
                 throw new ApplicationException("Did not see an argument for the directory to apply licenses onto");
@@ -19,10 +29,29 @@
 
             var filesToLicense = Directory.EnumerateFiles(args.First(), "*", SearchOption.AllDirectories)
                 .GroupBy(Path.GetExtension)
-                .Where(group => _supportedExtensions.Contains(group.Key))
+                .Where(group => licensesByExtension.Keys.Contains(group.Key))
                 .SelectMany(group => group)
                 .Where(file => !_startsWithBlacklist.Any(Path.GetFileName(file).StartsWith));
 
+            var filesToApplyLicense = filesToLicense
+                .Where(file => ValidLicenseHeader(file, licensesByExtension[Path.GetExtension(file)]));
+        }
+
+        private static bool ValidLicenseHeader(string filename, string licenseFormat)
+        {
+            const int linesToBuffer = 20;
+            StringBuilder buffered = new StringBuilder();
+
+            using (StreamReader reader = new StreamReader(File.OpenRead(filename)))
+            {
+                for (int i = 0; !reader.EndOfStream && i != linesToBuffer; i++)
+                {
+                    buffered.AppendLine(reader.ReadLine());
+                }
+            }
+
+            var license = string.Format(licenseFormat, DateTime.Now.Year);
+            return buffered.ToString().StartsWith(license);
         }
     }
 }
