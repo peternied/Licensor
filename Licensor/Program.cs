@@ -17,7 +17,7 @@
             { ".js", Resources.JSLicenseFormat },
         };
 
-        private readonly static string[] _startsWithBlacklist = { "jquery" };
+        private readonly static string[] _startsWithBlacklist = { "jquery", "knockout", "modernizr", "_references",  };
 
         static void Main(string[] args)
         {
