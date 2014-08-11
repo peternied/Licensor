@@ -44,12 +44,33 @@
         private static void ApplyLicenseHeader(string file, string licenseFormat)
         {
             var license = string.Format(licenseFormat, DateTime.Now.Year);
-            string fileContents = File.ReadAllText(file);
+            string extension = Path.GetExtension(file);
+            string firstValidLine;
+            switch (extension)
+            {
+                case ".java":
+                    firstValidLine = "package";
+                    break;
+                case ".cs":
+                    firstValidLine = "namespace";
+                    break;
+                default:
+                    firstValidLine = string.Empty;
+                    break;
+            }
+
+            string[] fileContents = File.ReadAllLines(file);
+            StringBuilder licenseFreeFile = new StringBuilder();
+            fileContents
+                .SkipWhile(line => !line.StartsWith(firstValidLine))
+                .ToList().ForEach(line => licenseFreeFile.AppendLine(line));
+
+
             using (TextWriter writer = new StreamWriter(File.OpenWrite(file)))
             {
                 writer.WriteLine(license);
                 writer.WriteLine();
-                writer.Write(fileContents);
+                writer.Write(licenseFreeFile.ToString());
             }
         }
 
