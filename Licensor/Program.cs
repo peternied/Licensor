@@ -36,7 +36,7 @@
             var filesToApplyLicense = filesToLicense
                 .Where(file => !ValidLicenseHeader(file, licensesByExtension[Path.GetExtension(file)]));
 
-            filesToApplyLicense.Take(1)
+            filesToApplyLicense
                 .AsParallel()
                 .ForAll(file => ApplyLicenseHeader(file, licensesByExtension[Path.GetExtension(file)]));
         }
