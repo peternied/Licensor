@@ -48,13 +48,14 @@
             using (TextWriter writer = new StreamWriter(File.OpenWrite(file)))
             {
                 writer.WriteLine(license);
+                writer.WriteLine();
                 writer.Write(fileContents);
             }
         }
 
         private static bool ValidLicenseHeader(string file, string licenseFormat)
         {
-            const int linesToBuffer = 20;
+            const int linesToBuffer = 25;
             StringBuilder buffered = new StringBuilder();
 
             using (StreamReader reader = new StreamReader(File.OpenRead(file)))
