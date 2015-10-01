@@ -17,11 +17,12 @@
             { ".js", Resources.JSLicenseFormat },
         };
 
-        private readonly static string[] _startsWithBlacklist = { "jquery", "knockout", "modernizr", "_references",  };
+        private readonly static string[] _startsWithBlacklist = { "jquery", "knockout", "modernizr", "_references", "AssemblyInfo" };
+
+        private static readonly string[] _folderBlacklist = { "Generated" };
 
         static void Main(string[] args)
         {
- 
             if (args.Length != 1)
             {
                 throw new ApplicationException("Did not see an argument for the directory to apply licenses onto");
@@ -31,7 +32,8 @@
                 .GroupBy(Path.GetExtension)
                 .Where(group => licensesByExtension.Keys.Contains(group.Key))
                 .SelectMany(group => group)
-                .Where(file => !_startsWithBlacklist.Any(Path.GetFileName(file).StartsWith));
+                .Where(file => !_startsWithBlacklist.Any(Path.GetFileName(file).StartsWith))
+                .Where(file => !IsUnderRestrictedFolder(file));
 
             var filesToApplyLicense = filesToLicense
                 .Where(file => !ValidLicenseHeader(file, licensesByExtension[Path.GetExtension(file)]));
@@ -65,7 +67,7 @@
                 .SkipWhile(line => !line.StartsWith(firstValidLine))
                 .ToList().ForEach(line => licenseFreeFile.AppendLine(line));
 
-
+            File.Delete(file);
             using (TextWriter writer = new StreamWriter(File.OpenWrite(file)))
             {
                 writer.WriteLine(license);
@@ -87,8 +89,29 @@
                 }
             }
 
+            if (buffered.ToString().Contains("auto-generated"))
+            {
+                return true;
+            }
+
             var license = string.Format(licenseFormat, DateTime.Now.Year);
             return buffered.ToString().StartsWith(license);
+        }
+
+        public static bool IsUnderRestrictedFolder(string path)
+        {
+            var elements = path.Split(new[] { Path.DirectorySeparatorChar }, StringSplitOptions.RemoveEmptyEntries);
+            foreach (var pathElement in elements)
+            {
+                foreach (var blackListedFolder in _folderBlacklist)
+                {
+                    if (pathElement.Equals(blackListedFolder, StringComparison.OrdinalIgnoreCase))
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
     }
 }
