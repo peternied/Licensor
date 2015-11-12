@@ -19,7 +19,7 @@
 
         private readonly static string[] _startsWithBlacklist = { "jquery", "knockout", "modernizr", "_references", "AssemblyInfo" };
 
-        private static readonly string[] _folderBlacklist = { "Generated" };
+        private static readonly string[] _folderBlacklist = {  };
 
         static void Main(string[] args)
         {
